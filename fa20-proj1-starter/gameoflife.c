@@ -23,6 +23,7 @@
 Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
 {
 	//YOUR CODE HERE
+	
 }
 
 //The main body of Life; given an image and a rule, computes one iteration of the Game of Life.

@@ -1,6 +1,7 @@
 int main() {
-    int a[20];
-    for (int i = 0; ; i++) {
+    int MAX_SIZE=20;
+    int a[MAX_SIZE];
+    for (int i = 0; i<MAX_SIZE; i++) {
         a[i] = i;
     }
 }

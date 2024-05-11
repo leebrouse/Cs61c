@@ -21,8 +21,8 @@
 #include "imageloader.h"
 
 //Opens a .ppm P3 image file, and constructs an Image object. 
-//You may find the function fscanf useful.
-//Make sure that you close the file with fclose before returning.
+//You may find the function "fscanf" useful.
+//Make sure that you close the file with "fclose" before returning.
 Image *readData(char *filename) 
 {
 	//YOUR CODE HERE

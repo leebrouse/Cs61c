@@ -1,6 +1,6 @@
 1.While you’re in a gdb session, how do you set the arguments that will be passed to the program when it’s run?
   当您处于 gdb 会话中时，如何设置在程序运行时将传递给程序的参数？
-
+  eg. set arg arg1 arg2
 
 2.How do you create a breakpoint?
   如何创建断点？
@@ -19,13 +19,16 @@
 
 6.How can you print the value of a variable (or even an expression like 1+2) in gdb?
   如何在 gdb 中打印变量（甚至是像 1+2 这样的表达式）的值？
+  eg.print 1+2
 
 7.How do you configure gdb so it displays the value of a variable after every step?
   如何配置 gdb 以便它在每个步骤后显示变量的值？
+  display value_name
+  eg.display p
 
 8.How do you show a list of all variables and their values in the current function?
-  如何在 currentfunction 中显示所有变量及其值的列表？
-
+  如何在 current function 中显示所有变量及其值的列表？
+  
 
 9.How do you quit out of gdb?
   你如何退出 gdb？
