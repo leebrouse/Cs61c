@@ -1,0 +1,41 @@
+1.While you’re in a gdb session, how do you set the arguments that will be passed to the program when it’s run?
+  当您处于 gdb 会话中时，如何设置在程序运行时将传递给程序的参数？
+
+
+2.How do you create a breakpoint?
+  如何创建断点？
+    eg. b hello.c:6
+
+3.How do you execute the next line of C code in the program after stopping at a breakpoint?
+  在断点处停止后，如何在程序中执行下一行 C 代码？
+    input "s"
+
+4.If the next line of code is a function call, you’ll execute the whole function call at once if you use your answer to #3. (If not, consider a different command for #3!) How do you tell GDB that you want to debug the code inside the function (i.e. step into the function) instead? (If you changed your answer to #3, then that answer is most likely now applicable here.)
+  如果下一行代码是函数调用，则使用对 #3 的答案，则将立即执行整个函数调用。（如果没有，请考虑 #3 的其他命令！你如何告诉GDB你想调试函数内部的代码（即单步执行函数）？（如果您将答案更改为 #3，那么该答案现在很可能适用于此处。
+
+5.How do you continue the program after stopping at a breakpoint?
+  在断点停止后如何继续程序？
+    input "c"
+
+6.How can you print the value of a variable (or even an expression like 1+2) in gdb?
+  如何在 gdb 中打印变量（甚至是像 1+2 这样的表达式）的值？
+
+7.How do you configure gdb so it displays the value of a variable after every step?
+  如何配置 gdb 以便它在每个步骤后显示变量的值？
+
+8.How do you show a list of all variables and their values in the current function?
+  如何在 currentfunction 中显示所有变量及其值的列表？
+
+
+9.How do you quit out of gdb?
+  你如何退出 gdb？
+    input "q"
+
+
+
+
+
+
+
+
+
