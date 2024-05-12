@@ -26,99 +26,93 @@
 Image *readData(char *filename)
 {
 	// YOUR CODE HERE
-	Image *ret = malloc(sizeof(Image));
-	if (ret == NULL)
+	Image *image = malloc(sizeof(Image));
+	if (image == NULL)
 	{
-		allocation_failed();
 		return NULL;
 	}
 
-	FILE *fp = fopen(filename, "r");
-	if (fp == NULL)
+	FILE *image_file = fopen(filename, "r");
+	if (image_file == NULL)
 	{
-		fprintf(stderr, "Error opening file");
-		free(ret);
+		free(image);
 		return NULL;
 	}
 
 	char format[3];
-	if (fscanf(fp, "%2s", format) != 1 || strcmp(format, "P3") != 0)
+	if (fscanf(image_file, "%2s", format) != 1 || strcmp(format, "P3") != 0)
 	{
-		fprintf(stderr, "Error: wrong format of file");
-		fclose(fp);
-		free(ret);
+		free(image);
+		fclose(image_file);
 		return NULL;
 	}
 
-	if (fscanf(fp, "%d %d", &ret->cols, &ret->rows) != 2)
+	if (fscanf(image_file, "%d %d", &image->cols, &image->rows) != 2)
 	{
-		fprintf(stderr, "Error: Unable to read the number of rows and columns.\n");
-		fclose(fp);
-		free(ret);
+		free(image);
+		fclose(image_file);
 		return NULL;
 	}
 
-	int max_value;
-	if (fscanf(fp, "%d", &max_value) != 1 || max_value != 255)
+	int max_num;
+	if (fscanf(image_file, "%d", &max_num) != 1 || max_num != 255)
 	{
-		printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
-		fclose(fp);
-		free(ret);
+		free(image);
+		fclose(image_file);
 		return NULL;
 	}
 
-	ret->image = malloc(ret->rows * sizeof(Color *));
-	if (ret->image == NULL)
+	image->image = malloc(sizeof(Color *) * image->rows);
+	if (image->image == NULL)
 	{
-		free(ret);
-		fclose(fp);
-		allocation_failed();
+		free(image);
+		fclose(image_file);
 		return NULL;
 	}
 
-	for (int i = 0; i < ret->rows; i++)
+	for (int i = 0; i < image->rows; i++)
 	{
-		ret->image[i] = malloc(ret->cols * sizeof(Color));
-		if (ret->image[i] == NULL)
+		image->image[i] = malloc(sizeof(Color) * image->cols);
+		if (image->image[i] == NULL)
 		{
 			for (int k = 0; k < i; k++)
 			{
-				free(ret->image[k]);
+				free(image->image[k]);
 			}
-			allocation_failed();
-			fclose(fp);
-			free(ret->image);
-			free(ret);
+			free(image->image);
+			free(image);
+			fclose(image_file);
 			return NULL;
 		}
 
-		for (int j = 0; j < ret->cols; j++)
+		for (int j = 0; j < image->cols; j++)
 		{
-			Color *color = &ret->image[i][j];
-			if (fscanf(fp, "%hhu %hhu %hhu", &color->R, &color->G, &color->B) != 3)
+			Color *color = &image->image[i][j];
+			if (fscanf(image_file, "%hhu %hhu %hhu", &color->R, &color->G, &color->B) != 3)
 			{
-				for (int k = 0; k < i; k++)
+				for (int k = 0; k <= i; k++)
 				{
-					free(ret->image[k]);
+					free(image->image[k]);
 				}
-				fprintf(stderr, "incorrect PPM format");
-				fclose(fp);
-				free(ret->image);
-				free(ret);
+				free(image->image);
+				free(image);
+				fclose(image_file);
 				return NULL;
 			}
 		}
 	}
-	fclose(fp);
-	return ret;
+
+	fclose(image_file);
+	return image;
 }
+
 
 // Given an image, prints to stdout (e.g. with printf) a .ppm P3 file with the image's data.
 void writeData(Image *image)
 {
 	// YOUR CODE HERE
 	printf("P3\n");
-	printf("%d %d\n", image->cols, image->rows);
+	printf("%d %d\n",image->cols,image->rows);
 	printf("255\n");
 	Color **colors = image->image;
 	for (int i = 0; i < image->rows; i++)
@@ -134,21 +128,24 @@ void writeData(Image *image)
 		}
 		printf("\n");
 	}
+
+	
 }
 
 // Frees an image
 void freeImage(Image *image)
 {
 	// YOUR CODE HERE
-	for (int i = 0; i < image->rows; i++)
-	{
-		free(image->image[i]);
-	}
+	
+	
+		//按行释放
+		for (int i = 0; i < image->rows; i++)
+		{
+			free(image->image[i]);
+		}	
+	
+	
 	free(image->image);
 	free(image);
 }
 
-void allocation_failed()
-{
-	fprintf(stderr, "Out of memory.\n");
-}
