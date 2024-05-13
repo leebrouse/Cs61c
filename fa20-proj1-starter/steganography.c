@@ -20,14 +20,83 @@
 
 //Determines what color the cell at the given row/col should be. This should not affect Image, and should allocate space for a new Color.
 Color *evaluateOnePixel(Image *image, int row, int col)
-{
-	//YOUR CODE HERE
+{   
+    //YOUR CODE HERE
+    Color *new_color = malloc(sizeof(Color));
+    if (new_color == NULL)
+    {
+        return NULL;
+    }
+
+    if ((image->image[row][col].B & 1) == 1)
+    {
+        new_color->R = new_color->G = new_color->B = 255;
+    }
+    else
+    {
+        new_color->R = new_color->G = new_color->B = 0;
+    }
+
+    return new_color;
 }
 
 //Given an image, creates a new image extracting the LSB of the B channel.
 Image *steganography(Image *image)
 {
-	//YOUR CODE HERE
+    //YOUR CODE HERE
+    Image *new_image = malloc(sizeof(Image));
+    if (new_image == NULL)
+    {
+        return NULL;
+    }
+
+    new_image->rows = image->rows;
+    new_image->cols = image->cols;
+
+    new_image->image = malloc(sizeof(Color *) * new_image->rows);
+    if (new_image->image == NULL)
+    {
+        free(new_image);
+        return NULL;
+    }
+
+    for (int i = 0; i < new_image->rows; i++)
+    {
+        new_image->image[i] = malloc(sizeof(Color) * new_image->cols);
+        if (new_image->image[i] == NULL)
+        {
+            for (int k = 0; k < i; k++)
+            {
+                free(new_image->image[k]);
+            }
+            free(new_image->image);
+            free(new_image);
+            return NULL;
+        }
+
+        for (int j = 0; j < new_image->cols; j++)
+        {
+            Color *new_color = evaluateOnePixel(image, i, j);
+
+            if (new_color == NULL)
+            {
+                for (int k = 0; k < i; k++)
+                {
+                    free(new_image->image[k]);
+                }
+                free(new_image->image);
+                free(new_image);
+                return NULL;
+            }
+            else
+            {
+                new_image->image[i][j] = *new_color;
+                free(new_color);
+            }
+        }
+    }
+
+    return new_image;
 }
 
 /*
@@ -45,5 +114,31 @@ Make sure to free all memory before returning!
 */
 int main(int argc, char **argv)
 {
-	//YOUR CODE HERE
+    //YOUR CODE HERE
+    if (argc != 2)
+    {
+        printf("usage: %s filename\n", argv[0]);
+        printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
+        exit(-1);
+    }
+
+    char *filename = argv[1];
+    Image *originalImage = readData(filename);
+    if (originalImage == NULL)
+    {
+        exit(1);
+    }
+
+    Image *newImage = steganography(originalImage);
+    if (newImage == NULL)
+    {
+        exit(1);
+    }
+
+    writeData(newImage);
+	// Free originalImage after creating newImage.
+	freeImage(originalImage);
+	// Free newImage before returning.
+    freeImage(newImage); 
+    return 0;
 }

@@ -26,6 +26,7 @@
 Image *readData(char *filename)
 {
 	// YOUR CODE HERE
+	
 	Image *image = malloc(sizeof(Image));
 	if (image == NULL)
 	{
@@ -38,6 +39,8 @@ Image *readData(char *filename)
 		free(image);
 		return NULL;
 	}
+
+	
 
 	char format[3];
 	if (fscanf(image_file, "%2s", format) != 1 || strcmp(format, "P3") != 0)
@@ -128,23 +131,18 @@ void writeData(Image *image)
 		}
 		printf("\n");
 	}
-
-	
 }
 
 // Frees an image
 void freeImage(Image *image)
 {
 	// YOUR CODE HERE
-	
-	
 		//按行释放
-		for (int i = 0; i < image->rows; i++)
-		{
-			free(image->image[i]);
-		}	
-	
-	
+	for (int i = 0; i < image->rows; i++)
+	{
+		free(image->image[i]);
+	}	
+
 	free(image->image);
 	free(image);
 }
