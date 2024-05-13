@@ -23,6 +23,24 @@
 Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
 {
 	//YOUR CODE HERE
+	 Color *new_color = malloc(sizeof(Color));
+    if (new_color == NULL)
+    {
+        return NULL;
+    }
+
+	//Change the judgment:
+	//Need to design a Algorithm to judge the cell with its neighbors
+    if ((image->image[row][col].B & 1) == 1)
+    {
+        new_color->R = new_color->G = new_color->B = 255;
+    }
+    else
+    {
+        new_color->R = new_color->G = new_color->B = 0;
+    }
+
+    return new_color;
 	
 }
 
@@ -31,6 +49,59 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
 Image *life(Image *image, uint32_t rule)
 {
 	//YOUR CODE HERE
+	    Image *new_image = malloc(sizeof(Image));
+    if (new_image == NULL)
+    {
+        return NULL;
+    }
+
+    new_image->rows = image->rows;
+    new_image->cols = image->cols;
+
+    new_image->image = malloc(sizeof(Color *) * new_image->rows);
+    if (new_image->image == NULL)
+    {
+        free(new_image);
+        return NULL;
+    }
+
+    for (int i = 0; i < new_image->rows; i++)
+    {
+        new_image->image[i] = malloc(sizeof(Color) * new_image->cols);
+        if (new_image->image[i] == NULL)
+        {
+            for (int k = 0; k < i; k++)
+            {
+                free(new_image->image[k]);
+            }
+            free(new_image->image);
+            free(new_image);
+            return NULL;
+        }
+
+        for (int j = 0; j < new_image->cols; j++)
+        {	//The code should be changed
+            Color *new_color = evaluateOneCell(image, i, j,rule);
+
+            if (new_color == NULL)
+            {
+                for (int k = 0; k < i; k++)
+                {
+                    free(new_image->image[k]);
+                }
+                free(new_image->image);
+                free(new_image);
+                return NULL;
+            }
+            else
+            {
+                new_image->image[i][j] = *new_color;
+                free(new_color);
+            }
+        }
+    }
+
+    return new_image;
 }
 
 /*
@@ -51,4 +122,32 @@ You may find it useful to copy the code from steganography.c, to start.
 int main(int argc, char **argv)
 {
 	//YOUR CODE HERE
+	 if (argc != 3)
+    {
+        printf("./gameOfLife filename rule");
+        printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
+		printf("rule is a hex number beginning with 0x; Life is 0x1808.");
+        exit(-1);
+    }
+
+	char *filename = argv[1];
+	Image *originalimage=readData(filename);
+	if (originalimage==NULL)
+	{
+		exit(1);
+	}
+
+	uint32_t rule=argv[2];
+	Image *new_image=life(originalimage,rule);
+	if (new_image==NULL)
+	{
+		exit(1);
+	}
+
+	writeData(new_image);
+	// Free originalImage after creating newImage.
+	freeImage(originalimage);
+	// Free newImage before returning.
+    freeImage(new_image); 
+	return 0;
 }
