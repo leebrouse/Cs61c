@@ -1,7 +1,20 @@
-1.
-2.
-3.
-4.
-5.
-6.
-7.
+1.clean:
+    -rm -rf core *.o *~ "#"*"#" Makefile.bak $(BINARIES) *.dSYM
+
+2.all: $(BINARIES)
+
+3.CC=gcc
+//1.CC 变量指定要使用的 C 编译器。
+//2.LD 变量指定要使用的链接器。
+
+4.CFLAGS=-ggdb -Wall -std=c99
+
+5.在 makefile 中引用变量 FOO 使用 $(FOO)。
+
+6.“Darwin” 代表 macOS 操作系统。
+
+7.$(LFSR_PROG): $(LFSR_OBJS)
+    $(CC) $(CFLAGS) -g -o $(LFSR_PROG) $(LFSR_OBJS) $(LDFLAGS)
+    (IN the line 31-32.)
+
+//lfsr 是线性反馈移位寄存器（Linear Feedback Shift Register）的缩写
